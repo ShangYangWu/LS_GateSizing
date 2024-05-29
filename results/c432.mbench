@@ -1,0 +1,442 @@
+Initial delay : 315.180
+Original area : 44.165
+Optimized area : 25.047
+INPUT(G1gat)
+INPUT(G4gat)
+INPUT(G8gat)
+INPUT(G11gat)
+INPUT(G14gat)
+INPUT(G17gat)
+INPUT(G21gat)
+INPUT(G24gat)
+INPUT(G27gat)
+INPUT(G30gat)
+INPUT(G34gat)
+INPUT(G37gat)
+INPUT(G40gat)
+INPUT(G43gat)
+INPUT(G47gat)
+INPUT(G50gat)
+INPUT(G53gat)
+INPUT(G56gat)
+INPUT(G60gat)
+INPUT(G63gat)
+INPUT(G66gat)
+INPUT(G69gat)
+INPUT(G73gat)
+INPUT(G76gat)
+INPUT(G79gat)
+INPUT(G82gat)
+INPUT(G86gat)
+INPUT(G89gat)
+INPUT(G92gat)
+INPUT(G95gat)
+INPUT(G99gat)
+INPUT(G102gat)
+INPUT(G105gat)
+INPUT(G108gat)
+INPUT(G112gat)
+INPUT(G115gat)
+OUTPUT(G223gat)
+OUTPUT(G329gat)
+OUTPUT(G370gat)
+OUTPUT(G421gat)
+OUTPUT(G430gat)
+OUTPUT(G431gat)
+OUTPUT(G432gat)
+X1 = INV1(G4gat)                                             slack : 9.74
+X2 = NAND1(G1gat, X1)                                        slack : 10.91
+X3 = INV1(G17gat)                                            slack : 9.74
+X4 = NAND1(G11gat, X3)                                       slack : 10.91
+X5 = INV1(G30gat)                                            slack : 17.45
+X6 = NAND1(G24gat, X5)                                       slack : 18.62
+X7 = INV1(G43gat)                                            slack : 25.16
+X8 = NAND1(G37gat, X7)                                       slack : 26.33
+X9 = INV1(G56gat)                                            slack : 32.87
+X10 = NAND1(G50gat, X9)                                      slack : 34.04
+X11 = INV1(G69gat)                                           slack : 40.58
+X12 = NAND1(G63gat, X11)                                     slack : 41.75
+X13 = INV1(G82gat)                                           slack : 48.29
+X14 = NAND1(G76gat, X13)                                     slack : 49.46
+X15 = INV1(G95gat)                                           slack : 56.00
+X16 = NAND1(G89gat, X15)                                     slack : 57.17
+X17 = INV1(G108gat)                                          slack : 63.71
+X18 = NAND1(G102gat, X17)                                    slack : 64.88
+X19 = NAND1(X2, X4)                                          slack : 8.87
+X20 = INV1(X19)                                              slack : 6.83
+X21 = NAND1(X6, X20)                                         slack : 8.00
+X22 = INV1(X21)                                              slack : 4.79
+X23 = NAND1(X8, X22)                                         slack : 5.96
+X24 = INV1(X23)                                              slack : 2.75
+X25 = NAND1(X10, X24)                                        slack : 3.92
+X26 = INV1(X25)                                              slack : 0.71
+X27 = NAND1(X12, X26)                                        slack : 1.88
+X28 = INV2(X27)                                              slack : 0.03
+X29 = NAND2(X14, X28)                                        slack : 0.54
+X30 = INV3(X29)                                              slack : 0.03
+X31 = NAND3(X16, X30)                                        slack : 0.03
+X32 = INV3(X31)                                              slack : 0.03
+X33 = NAND3(X18, X32)                                        slack : 0.03
+X34 = INV3(X33)                                              slack : 0.03
+X35 = NAND3(X2, X34)                                         slack : 0.03
+X36 = INV1(X2)                                               slack : 70.19
+X37 = NAND1(X36, X33)                                        slack : 2.40
+X38 = NAND3(X35, X37)                                        slack : 0.03
+X39 = INV1(G4gat)                                            slack : 82.80
+X40 = NAND1(X39, G8gat)                                      slack : 83.97
+X41 = INV1(X40)                                              slack : 81.63
+X42 = NAND3(X38, X41)                                        slack : 0.03
+X43 = INV3(X33)                                              slack : 0.03
+X44 = NAND3(X4, X43)                                         slack : 0.03
+X45 = INV1(X4)                                               slack : 70.19
+X46 = NAND1(X45, X33)                                        slack : 2.40
+X47 = NAND3(X44, X46)                                        slack : 0.03
+X48 = INV1(G17gat)                                           slack : 82.80
+X49 = NAND1(X48, G21gat)                                     slack : 83.97
+X50 = INV1(X49)                                              slack : 81.63
+X51 = NAND3(X47, X50)                                        slack : 0.03
+X52 = INV1(X33)                                              slack : 5.70
+X53 = NAND1(X6, X52)                                         slack : 6.87
+X54 = INV1(X6)                                               slack : 77.90
+X55 = NAND1(X54, X33)                                        slack : 10.11
+X56 = NAND1(X53, X55)                                        slack : 4.24
+X57 = INV1(G30gat)                                           slack : 90.51
+X58 = NAND1(X57, G34gat)                                     slack : 91.68
+X59 = INV1(X58)                                              slack : 87.29
+X60 = NAND1(X56, X59)                                        slack : 2.19
+X61 = INV1(X33)                                              slack : 13.41
+X62 = NAND1(X8, X61)                                         slack : 14.58
+X63 = INV1(X8)                                               slack : 85.61
+X64 = NAND1(X63, X33)                                        slack : 17.82
+X65 = NAND1(X62, X64)                                        slack : 11.95
+X66 = INV1(G43gat)                                           slack : 98.22
+X67 = NAND1(X66, G47gat)                                     slack : 99.39
+X68 = INV1(X67)                                              slack : 95.00
+X69 = NAND1(X65, X68)                                        slack : 9.90
+X70 = INV1(X33)                                              slack : 21.12
+X71 = NAND1(X10, X70)                                        slack : 22.29
+X72 = INV1(X10)                                              slack : 93.32
+X73 = NAND1(X72, X33)                                        slack : 25.53
+X74 = NAND1(X71, X73)                                        slack : 19.66
+X75 = INV1(G56gat)                                           slack : 105.93
+X76 = NAND1(X75, G60gat)                                     slack : 107.10
+X77 = INV1(X76)                                              slack : 102.71
+X78 = NAND1(X74, X77)                                        slack : 17.61
+X79 = INV1(X33)                                              slack : 28.83
+X80 = NAND1(X12, X79)                                        slack : 30.00
+X81 = INV1(X12)                                              slack : 101.03
+X82 = NAND1(X81, X33)                                        slack : 33.24
+X83 = NAND1(X80, X82)                                        slack : 27.37
+X84 = INV1(G69gat)                                           slack : 113.64
+X85 = NAND1(X84, G73gat)                                     slack : 114.81
+X86 = INV1(X85)                                              slack : 110.42
+X87 = NAND1(X83, X86)                                        slack : 25.32
+X88 = INV1(X33)                                              slack : 36.54
+X89 = NAND1(X14, X88)                                        slack : 37.71
+X90 = INV1(X14)                                              slack : 108.74
+X91 = NAND1(X90, X33)                                        slack : 40.95
+X92 = NAND1(X89, X91)                                        slack : 35.08
+X93 = INV1(G82gat)                                           slack : 121.35
+X94 = NAND1(X93, G86gat)                                     slack : 122.52
+X95 = INV1(X94)                                              slack : 118.13
+X96 = NAND1(X92, X95)                                        slack : 33.03
+X97 = INV1(X33)                                              slack : 44.25
+X98 = NAND1(X16, X97)                                        slack : 45.42
+X99 = INV1(X16)                                              slack : 116.45
+X100 = NAND1(X99, X33)                                       slack : 48.66
+X101 = NAND1(X98, X100)                                      slack : 42.79
+X102 = INV1(G95gat)                                          slack : 129.06
+X103 = NAND1(X102, G99gat)                                   slack : 130.23
+X104 = INV1(X103)                                            slack : 125.84
+X105 = NAND1(X101, X104)                                     slack : 40.74
+X106 = INV1(X33)                                             slack : 51.96
+X107 = NAND1(X18, X106)                                      slack : 53.13
+X108 = INV1(X18)                                             slack : 124.16
+X109 = NAND1(X108, X33)                                      slack : 56.37
+X110 = NAND1(X107, X109)                                     slack : 50.50
+X111 = INV1(G108gat)                                         slack : 136.77
+X112 = NAND1(X111, G112gat)                                  slack : 137.94
+X113 = INV1(X112)                                            slack : 133.55
+X114 = NAND1(X110, X113)                                     slack : 48.45
+X115 = NAND3(X42, X51)                                       slack : 0.03
+X116 = INV3(X115)                                            slack : 0.03
+X117 = NAND3(X60, X116)                                      slack : 0.03
+X118 = INV3(X117)                                            slack : 0.03
+X119 = NAND3(X69, X118)                                      slack : 0.03
+X120 = INV3(X119)                                            slack : 0.03
+X121 = NAND3(X78, X120)                                      slack : 0.03
+X122 = INV3(X121)                                            slack : 0.03
+X123 = NAND3(X87, X122)                                      slack : 0.03
+X124 = INV3(X123)                                            slack : 0.03
+X125 = NAND3(X96, X124)                                      slack : 0.03
+X126 = INV3(X125)                                            slack : 0.03
+X127 = NAND3(X105, X126)                                     slack : 0.03
+X128 = INV3(X127)                                            slack : 0.03
+X129 = NAND3(X114, X128)                                     slack : 0.03
+X130 = INV3(X129)                                            slack : 0.03
+X131 = NAND3(X42, X130)                                      slack : 0.03
+X132 = INV1(X42)                                             slack : 60.48
+X133 = NAND1(X132, X129)                                     slack : 2.40
+X134 = NAND3(X131, X133)                                     slack : 0.03
+X135 = INV1(G4gat)                                           slack : 154.53
+X136 = NAND1(X135, G14gat)                                   slack : 155.70
+X137 = INV1(X136)                                            slack : 152.49
+X138 = NAND1(X38, X137)                                      slack : 70.89
+X139 = INV1(X138)                                            slack : 69.72
+X140 = NAND3(X134, X139)                                     slack : 0.03
+X141 = INV3(X129)                                            slack : 0.03
+X142 = NAND3(X51, X141)                                      slack : 0.03
+X143 = INV1(X51)                                             slack : 60.48
+X144 = NAND1(X143, X129)                                     slack : 2.40
+X145 = NAND3(X142, X144)                                     slack : 0.03
+X146 = INV1(G17gat)                                          slack : 154.53
+X147 = NAND1(X146, G27gat)                                   slack : 155.70
+X148 = INV1(X147)                                            slack : 152.49
+X149 = NAND1(X47, X148)                                      slack : 70.89
+X150 = INV1(X149)                                            slack : 69.72
+X151 = NAND3(X145, X150)                                     slack : 0.03
+X152 = INV1(X129)                                            slack : 5.70
+X153 = NAND1(X60, X152)                                      slack : 6.87
+X154 = INV1(X60)                                             slack : 62.64
+X155 = NAND1(X154, X129)                                     slack : 10.11
+X156 = NAND1(X153, X155)                                     slack : 4.83
+X157 = INV1(G30gat)                                          slack : 162.24
+X158 = NAND1(X157, G40gat)                                   slack : 163.41
+X159 = INV1(X158)                                            slack : 160.20
+X160 = NAND1(X56, X159)                                      slack : 75.10
+X161 = INV1(X160)                                            slack : 73.06
+X162 = NAND1(X156, X161)                                     slack : 3.96
+X163 = INV1(X129)                                            slack : 13.41
+X164 = NAND1(X69, X163)                                      slack : 14.58
+X165 = INV1(X69)                                             slack : 70.35
+X166 = NAND1(X165, X129)                                     slack : 17.82
+X167 = NAND1(X164, X166)                                     slack : 12.54
+X168 = INV1(G43gat)                                          slack : 169.95
+X169 = NAND1(X168, G53gat)                                   slack : 171.12
+X170 = INV1(X169)                                            slack : 167.91
+X171 = NAND1(X65, X170)                                      slack : 82.81
+X172 = INV1(X171)                                            slack : 80.77
+X173 = NAND1(X167, X172)                                     slack : 11.67
+X174 = INV1(X129)                                            slack : 21.12
+X175 = NAND1(X78, X174)                                      slack : 22.29
+X176 = INV1(X78)                                             slack : 78.06
+X177 = NAND1(X176, X129)                                     slack : 25.53
+X178 = NAND1(X175, X177)                                     slack : 20.25
+X179 = INV1(G56gat)                                          slack : 177.66
+X180 = NAND1(X179, G66gat)                                   slack : 178.83
+X181 = INV1(X180)                                            slack : 175.62
+X182 = NAND1(X74, X181)                                      slack : 90.52
+X183 = INV1(X182)                                            slack : 88.48
+X184 = NAND1(X178, X183)                                     slack : 19.38
+X185 = INV1(X129)                                            slack : 28.83
+X186 = NAND1(X87, X185)                                      slack : 30.00
+X187 = INV1(X87)                                             slack : 85.77
+X188 = NAND1(X187, X129)                                     slack : 33.24
+X189 = NAND1(X186, X188)                                     slack : 27.96
+X190 = INV1(G69gat)                                          slack : 185.37
+X191 = NAND1(X190, G79gat)                                   slack : 186.54
+X192 = INV1(X191)                                            slack : 183.33
+X193 = NAND1(X83, X192)                                      slack : 98.23
+X194 = INV1(X193)                                            slack : 96.19
+X195 = NAND1(X189, X194)                                     slack : 27.09
+X196 = INV1(X129)                                            slack : 36.54
+X197 = NAND1(X96, X196)                                      slack : 37.71
+X198 = INV1(X96)                                             slack : 93.48
+X199 = NAND1(X198, X129)                                     slack : 40.95
+X200 = NAND1(X197, X199)                                     slack : 35.67
+X201 = INV1(G82gat)                                          slack : 193.08
+X202 = NAND1(X201, G92gat)                                   slack : 194.25
+X203 = INV1(X202)                                            slack : 191.04
+X204 = NAND1(X92, X203)                                      slack : 105.94
+X205 = INV1(X204)                                            slack : 103.90
+X206 = NAND1(X200, X205)                                     slack : 34.80
+X207 = INV1(X129)                                            slack : 44.25
+X208 = NAND1(X105, X207)                                     slack : 45.42
+X209 = INV1(X105)                                            slack : 101.19
+X210 = NAND1(X209, X129)                                     slack : 48.66
+X211 = NAND1(X208, X210)                                     slack : 43.38
+X212 = INV1(G95gat)                                          slack : 200.79
+X213 = NAND1(X212, G105gat)                                  slack : 201.96
+X214 = INV1(X213)                                            slack : 198.75
+X215 = NAND1(X101, X214)                                     slack : 113.65
+X216 = INV1(X215)                                            slack : 111.61
+X217 = NAND1(X211, X216)                                     slack : 42.51
+X218 = INV1(X129)                                            slack : 51.96
+X219 = NAND1(X114, X218)                                     slack : 53.13
+X220 = INV1(X114)                                            slack : 108.90
+X221 = NAND1(X220, X129)                                     slack : 56.37
+X222 = NAND1(X219, X221)                                     slack : 51.09
+X223 = INV1(G108gat)                                         slack : 208.50
+X224 = NAND1(X223, G115gat)                                  slack : 209.67
+X225 = INV1(X224)                                            slack : 206.46
+X226 = NAND1(X110, X225)                                     slack : 121.36
+X227 = INV1(X226)                                            slack : 119.32
+X228 = NAND1(X222, X227)                                     slack : 50.22
+X229 = NAND3(X140, X151)                                     slack : 0.03
+X230 = INV3(X229)                                            slack : 0.03
+X231 = NAND3(X162, X230)                                     slack : 0.03
+X232 = INV3(X231)                                            slack : 0.03
+X233 = NAND3(X173, X232)                                     slack : 0.03
+X234 = INV3(X233)                                            slack : 0.03
+X235 = NAND3(X184, X234)                                     slack : 0.03
+X236 = INV3(X235)                                            slack : 0.03
+X237 = NAND3(X195, X236)                                     slack : 0.03
+X238 = INV3(X237)                                            slack : 0.03
+X239 = NAND3(X206, X238)                                     slack : 0.03
+X240 = INV3(X239)                                            slack : 0.03
+X241 = NAND3(X217, X240)                                     slack : 0.03
+X242 = INV3(X241)                                            slack : 0.03
+X243 = NAND3(X228, X242)                                     slack : 0.03
+X244 = INV1(G1gat)                                           slack : 277.83
+X245 = NAND1(X244, X33)                                      slack : 198.81
+X246 = INV1(G8gat)                                           slack : 285.54
+X247 = NAND1(X246, X129)                                     slack : 126.93
+X248 = INV1(G14gat)                                          slack : 293.25
+X249 = NAND1(X248, X243)                                     slack : 58.20
+X250 = INV1(G4gat)                                           slack : 282.30
+X251 = NAND1(X250, X245)                                     slack : 197.94
+X252 = INV1(X251)                                            slack : 195.90
+X253 = NAND1(X247, X252)                                     slack : 126.06
+X254 = INV1(X253)                                            slack : 124.02
+X255 = NAND1(X249, X254)                                     slack : 57.33
+X256 = INV1(G11gat)                                          slack : 226.65
+X257 = NAND1(X256, X33)                                      slack : 147.63
+X258 = INV1(G21gat)                                          slack : 226.65
+X259 = NAND1(X258, X129)                                     slack : 68.04
+X260 = INV1(G27gat)                                          slack : 235.06
+X261 = NAND2(X260, X243)                                     slack : 0.01
+X262 = NAND1(X257, X259)                                     slack : 67.17
+X263 = INV1(X262)                                            slack : 66.00
+X264 = NAND3(X261, X263)                                     slack : 0.01
+X265 = INV1(G17gat)                                          slack : 247.41
+X266 = INV3(X264)                                            slack : 0.01
+X267 = NAND3(X265, X266)                                     slack : 0.01
+X268 = INV1(G24gat)                                          slack : 226.50
+X269 = NAND1(X268, X33)                                      slack : 147.48
+X270 = INV1(G34gat)                                          slack : 226.50
+X271 = NAND1(X270, X129)                                     slack : 67.89
+X272 = INV1(G40gat)                                          slack : 235.08
+X273 = NAND3(X272, X243)                                     slack : 0.03
+X274 = NAND1(X269, X271)                                     slack : 67.02
+X275 = INV1(X274)                                            slack : 65.85
+X276 = NAND3(X273, X275)                                     slack : 0.03
+X277 = INV1(G30gat)                                          slack : 247.26
+X278 = INV3(X276)                                            slack : 0.03
+X279 = NAND3(X277, X278)                                     slack : 0.03
+X280 = INV1(G37gat)                                          slack : 234.36
+X281 = NAND1(X280, X33)                                      slack : 155.34
+X282 = INV1(G47gat)                                          slack : 234.36
+X283 = NAND1(X282, X129)                                     slack : 75.75
+X284 = INV1(G53gat)                                          slack : 242.07
+X285 = NAND1(X284, X243)                                     slack : 7.02
+X286 = NAND1(X281, X283)                                     slack : 74.88
+X287 = INV1(X286)                                            slack : 72.84
+X288 = NAND1(X285, X287)                                     slack : 6.15
+X289 = INV1(G43gat)                                          slack : 252.48
+X290 = INV1(X288)                                            slack : 2.34
+X291 = NAND1(X289, X290)                                     slack : 3.51
+X292 = INV1(G50gat)                                          slack : 242.07
+X293 = NAND1(X292, X33)                                      slack : 163.05
+X294 = INV1(G60gat)                                          slack : 242.07
+X295 = NAND1(X294, X129)                                     slack : 83.46
+X296 = INV1(G66gat)                                          slack : 249.78
+X297 = NAND1(X296, X243)                                     slack : 14.73
+X298 = NAND1(X293, X295)                                     slack : 82.59
+X299 = INV1(X298)                                            slack : 80.55
+X300 = NAND1(X297, X299)                                     slack : 13.86
+X301 = INV1(G56gat)                                          slack : 260.19
+X302 = INV1(X300)                                            slack : 10.05
+X303 = NAND1(X301, X302)                                     slack : 11.22
+X304 = INV1(G63gat)                                          slack : 250.08
+X305 = NAND1(X304, X33)                                      slack : 171.06
+X306 = INV1(G73gat)                                          slack : 250.08
+X307 = NAND1(X306, X129)                                     slack : 91.47
+X308 = INV1(G79gat)                                          slack : 257.79
+X309 = NAND1(X308, X243)                                     slack : 22.74
+X310 = NAND1(X305, X307)                                     slack : 90.60
+X311 = INV1(X310)                                            slack : 88.56
+X312 = NAND1(X309, X311)                                     slack : 21.87
+X313 = INV1(G69gat)                                          slack : 269.38
+X314 = INV1(X312)                                            slack : 19.24
+X315 = NAND1(X313, X314)                                     slack : 20.41
+X316 = INV1(G76gat)                                          slack : 257.64
+X317 = NAND1(X316, X33)                                      slack : 178.62
+X318 = INV1(G86gat)                                          slack : 257.64
+X319 = NAND1(X318, X129)                                     slack : 99.03
+X320 = INV1(G92gat)                                          slack : 265.35
+X321 = NAND1(X320, X243)                                     slack : 30.30
+X322 = NAND1(X317, X319)                                     slack : 98.16
+X323 = INV1(X322)                                            slack : 96.12
+X324 = NAND1(X321, X323)                                     slack : 29.43
+X325 = INV1(G82gat)                                          slack : 276.35
+X326 = INV1(X324)                                            slack : 26.21
+X327 = NAND1(X325, X326)                                     slack : 27.38
+X328 = INV1(G89gat)                                          slack : 265.50
+X329 = NAND1(X328, X33)                                      slack : 186.48
+X330 = INV1(G99gat)                                          slack : 265.50
+X331 = NAND1(X330, X129)                                     slack : 106.89
+X332 = INV1(G105gat)                                         slack : 273.21
+X333 = NAND1(X332, X243)                                     slack : 38.16
+X334 = NAND1(X329, X331)                                     slack : 106.02
+X335 = INV1(X334)                                            slack : 103.98
+X336 = NAND1(X333, X335)                                     slack : 37.29
+X337 = INV1(G95gat)                                          slack : 284.80
+X338 = INV1(X336)                                            slack : 34.66
+X339 = NAND1(X337, X338)                                     slack : 35.83
+X340 = INV1(G102gat)                                         slack : 273.36
+X341 = NAND1(X340, X33)                                      slack : 194.34
+X342 = INV1(G112gat)                                         slack : 273.36
+X343 = NAND1(X342, X129)                                     slack : 114.75
+X344 = INV1(G115gat)                                         slack : 281.07
+X345 = NAND1(X344, X243)                                     slack : 46.02
+X346 = NAND1(X341, X343)                                     slack : 113.88
+X347 = INV1(X346)                                            slack : 111.84
+X348 = NAND1(X345, X347)                                     slack : 45.15
+X349 = INV1(G108gat)                                         slack : 293.25
+X350 = INV1(X348)                                            slack : 43.11
+X351 = NAND1(X349, X350)                                     slack : 44.28
+X352 = NAND3(X267, X279)                                     slack : 0.01
+X353 = INV3(X352)                                            slack : 0.01
+X354 = NAND3(X291, X353)                                     slack : 0.01
+X355 = INV3(X354)                                            slack : 0.01
+X356 = NAND3(X303, X355)                                     slack : 0.01
+X357 = INV3(X356)                                            slack : 0.01
+X358 = NAND3(X315, X357)                                     slack : 0.01
+X359 = INV3(X358)                                            slack : 0.01
+X360 = NAND3(X327, X359)                                     slack : 0.01
+X361 = INV3(X360)                                            slack : 0.01
+X362 = NAND3(X339, X361)                                     slack : 0.01
+X363 = INV3(X362)                                            slack : 0.01
+X364 = NAND3(X351, X363)                                     slack : 0.01
+X365 = NAND3(X255, X364)                                     slack : 0.01
+X366 = INV1(X291)                                            slack : 22.69
+X367 = NAND1(X279, X366)                                     slack : 23.86
+X368 = INV1(X352)                                            slack : 36.52
+X369 = NAND1(X368, X367)                                     slack : 29.53
+X370 = INV1(X369)                                            slack : 27.49
+X371 = NAND1(X303, X370)                                     slack : 28.66
+X372 = NAND1(X279, X291)                                     slack : 19.24
+X373 = INV1(X315)                                            slack : 24.76
+X374 = INV1(X372)                                            slack : 17.20
+X375 = NAND1(X373, X374)                                     slack : 18.37
+X376 = INV1(X375)                                            slack : 14.57
+X377 = NAND1(X303, X376)                                     slack : 15.74
+X378 = NAND1(X291, X303)                                     slack : 35.55
+X379 = INV1(X327)                                            slack : 39.59
+X380 = INV1(X378)                                            slack : 33.51
+X381 = NAND1(X379, X380)                                     slack : 34.68
+X382 = INV1(X352)                                            slack : 36.52
+X383 = NAND1(X382, X377)                                     slack : 13.70
+X384 = INV1(X383)                                            slack : 11.66
+X385 = NAND1(X381, X384)                                     slack : 12.83
+X386 = INV1(X372)                                            slack : 25.06
+X387 = NAND1(X327, X386)                                     slack : 26.23
+X388 = INV1(X339)                                            slack : 40.33
+X389 = INV1(X387)                                            slack : 23.02
+X390 = NAND1(X388, X389)                                     slack : 24.19
+X391 = NAND1(X267, X367)                                     slack : 21.82
+X392 = INV1(X391)                                            slack : 19.78
+X393 = NAND1(X377, X392)                                     slack : 13.70
+X394 = INV1(X393)                                            slack : 11.66
+X395 = NAND1(X390, X394)                                     slack : 12.83
+X396 = INV3(X365)                                            slack : 0.01

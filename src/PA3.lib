@@ -1,0 +1,31 @@
+INV1
+Timing 3.38 1.03
+Area 0.044
+
+INV2
+Timing 3.28 0.47
+Area 0.058
+
+INV3
+Timing 2.82 0.42
+Area 0.073
+
+INV4
+Timing 3.30 0.24
+Area 0.087
+
+INV5
+Timing 3.13 0.22
+Area 0.102
+
+NAND1
+Timing 4.60 0.74
+Area 0.058
+
+NAND2
+Timing 4.34 0.30
+Area 0.087
+
+NAND3
+Timing 4.32 0.15
+Area 0.146
