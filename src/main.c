@@ -10,6 +10,7 @@
 
 #define max(a,b) ((a) > (b) ? (a) : (b))
 #define min(a,b) ((a) < (b) ? (a) : (b))
+#define FIX_NEG_ZERO(x) (fabs(x) < 1e-10 ? 0.0 : (x))
 
 // procedures to start and stop the ABC framework
 // (should be called before and after the ABC procedures are called)
@@ -60,7 +61,7 @@ lib_gate nands[8]; // library data count: 8
 double _initial_delay = 0;
 double _original_area = 0;
 double _optimized_area = 0;
-unsigned int inv = 0; // inverter count
+unsigned int _inv = 0; // inverter count
 unsigned int nand = 0; // nand gate count
 
 //***********************************************************
@@ -150,7 +151,7 @@ void parseLib(){
 
 void sortLib(){
 	// sort libraries from small area to large area
-	for(unsigned int i=0; i<inv_count; ++i){
+	for(unsigned int i=0; i<inv_count; i++){
 		for(unsigned int j=0; j<i; ++j){
 			if(inverters[j].area > inverters[i].area){
 				lib_gate temp = inverters[j];
@@ -160,7 +161,7 @@ void sortLib(){
 		}
 	}
 
-	for(unsigned int i=0; i<nand_count; ++i){
+	for(unsigned int i=0; i<nand_count; i++){
 		for(unsigned int j=0; j<i; ++j){
 			if(nands[j].area > nands[i].area){
 				lib_gate temp = nands[j];
@@ -181,13 +182,14 @@ void mapping(Abc_Ntk_t *ntk){
 			continue;
 		}
 		Abc_ObjForEachFanin(obj, fi, j){
-			Abc_ObjName(fi); // just to get rid of varibale unused warning
-			// if input already has INV => add in an INV will make it become redundant INV
-			// if input doesn't have INV => add in an INV will make it become an INV
-			if (j == 0){
-				obj->fCompl0 = !obj->fCompl0;
-			}else{
-				obj->fCompl1 = !obj->fCompl1;
+			if(fi->Type != ABC_OBJ_PI){
+				// if input already has INV => add in an INV will make it become redundant INV
+				// if input doesn't have INV => add in an INV will make it become an INV
+				if (j == 0){
+					obj->fCompl0 = !obj->fCompl0;
+				}else{
+					obj->fCompl1 = !obj->fCompl1;
+				}
 			}
 		}
 	}
@@ -204,13 +206,13 @@ int getIndex(Abc_Obj_t *obj){
 
 void initNode(Abc_Obj_t* obj){
 	nodes[node_count].obj = obj;
-	nodes[node_count].delay = 0. ;
-	nodes[node_count].arrival0 = 0. ;
-	nodes[node_count].arrival1 = 0. ;
+	nodes[node_count].delay = 0.0 ;
+	nodes[node_count].arrival0 = 0.0 ;
+	nodes[node_count].arrival1 = 0.0 ;
 	nodes[node_count].required_time = DBL_MAX;
-	nodes[node_count].slack = 0. ;
-	nodes[node_count].inv_slack0 = 0. ;
-	nodes[node_count].inv_slack1 = 0. ;
+	nodes[node_count].slack = 0.0 ;
+	nodes[node_count].inv_slack0 = 0.0 ;
+	nodes[node_count].inv_slack1 = 0.0 ;
 	nodes[node_count].inv0_id = -1;
 	nodes[node_count].inv1_id = -1;
 	nodes[node_count].nand_id = -1;
@@ -220,7 +222,8 @@ void initNode(Abc_Obj_t* obj){
 
 	if(obj->Type == ABC_OBJ_PI){
 		// only PIs don't have to compare required_time with min()
-		nodes[node_count].required_time = 0. ;
+		nodes[node_count].required_time = 0.0 ;
+
 	}else{
 		// getting the node index of inputs
 		Abc_Obj_t* fanin;
@@ -229,7 +232,7 @@ void initNode(Abc_Obj_t* obj){
 			int index = getIndex(fanin);
 			nodes[node_count].inputs[i] = index;
 		}
-	}	
+	}
 }
 
 void createnodes(Abc_Ntk_t *ntk){
@@ -250,12 +253,12 @@ void createnodes(Abc_Ntk_t *ntk){
 		nodes[node_count].type = PO;
 		initNode(obj);
 		++node_count;
-	}	
+	}
 }
 
 void initialDelay(){
 	// calculate delay for each gate
-	for(unsigned int node_id=0; node_id < node_count; ++node_id){
+	for(unsigned int node_id=0; node_id < node_count; node_id++){
 		if(nodes[node_id].type == PI){
 			continue;
 		}else{
@@ -278,7 +281,7 @@ void initialDelay(){
 					nodes[node_id].inv0_id = selected_inv_id;
 					if(selected_inv_id != -1){
 						_original_area += inverters[selected_inv_id].area; // update original_area
-						inv++;
+						_inv++;
 					}
 				}	
 				nodes[node_id].delay += nodes[nodes[node_id].inputs[0]].delay;
@@ -288,14 +291,16 @@ void initialDelay(){
 				nodes[node_id].arrival0 = nodes[nodes[node_id].inputs[0]].delay;
 				nodes[node_id].arrival1 = nodes[nodes[node_id].inputs[1]].delay;
 				// NAND has two fanins
-				double fanin0_delay=max(nodes[node_id].arrival0, nodes[node_id].arrival1),
-					   fanin1_delay=max(nodes[node_id].arrival0, nodes[node_id].arrival1);
+				// double fanin0_delay=max(nodes[node_id].arrival0, nodes[node_id].arrival1),
+				// 	   fanin1_delay=max(nodes[node_id].arrival0, nodes[node_id].arrival1);
+				double fanin0_delay = nodes[node_id].arrival0,
+					   fanin1_delay = nodes[node_id].arrival1;
 				// fanin0
 				if(nodes[node_id].obj->fCompl0 == 1){
 					// get the fastest inverter in library
 					double min_delay = DBL_MAX;
 					int selected_inv_id = -1;
-					for(int inv=0; inv<inv_count; ++inv){
+					for(int inv=0; inv<inv_count; inv++){
 						double delay = inverters[inv].timing[0] + inverters[inv].timing[1];
 						if(min_delay > delay){
 							selected_inv_id = inv;
@@ -306,7 +311,7 @@ void initialDelay(){
 					nodes[node_id].inv0_id = selected_inv_id; // inverter library id
 					if(selected_inv_id != -1){
 						_original_area += inverters[selected_inv_id].area; // update original_area
-						inv++;		
+						_inv++;		
 					}
 				}
 				// fanin1
@@ -314,7 +319,7 @@ void initialDelay(){
 					// get the fastest inverter in library
 					double min_delay = DBL_MAX;
 					int selected_inv_id = -1;
-					for(int inv=0; inv<inv_count; ++inv){
+					for(int inv=0; inv<inv_count; inv++){
 						double delay = inverters[inv].timing[0] + inverters[inv].timing[1];
 						if(min_delay > delay){
 							selected_inv_id = inv;
@@ -325,7 +330,7 @@ void initialDelay(){
 					nodes[node_id].inv1_id = selected_inv_id; // inverter library id
 					if(selected_inv_id != -1){
 						_original_area += inverters[selected_inv_id].area; // update original_area
-						inv++;
+						_inv++;
 					}
 				}
 				nodes[node_id].delay += max(fanin0_delay, fanin1_delay);
@@ -334,7 +339,7 @@ void initialDelay(){
 				// get the fastest nand in library
 				double min_delay = DBL_MAX;
 				int selected_nand_id = -1;
-				for(int nand_id=0; nand_id<nand_count; ++nand_id){
+				for(int nand_id=0; nand_id<nand_count; nand_id++){
 					double delay = nands[nand_id].timing[0] + nands[nand_id].timing[1]*Abc_ObjFanoutNum(nodes[node_id].obj);
 					if(min_delay > delay){
 						selected_nand_id = nand_id;
@@ -352,17 +357,17 @@ void initialDelay(){
 	}
 
 	// calculate required_time for each gate
-	for(unsigned int node_id = node_count-1; node_id >0; --node_id){
+	for(int node_id = node_count-1; node_id >=0; node_id--){
 		if(nodes[node_id].type == PI){
 			continue;
 		}else{
 			if(nodes[node_id].type == PO){
-				nodes[node_id].required_time = _initial_delay; // critical path time
+				nodes[node_id].required_time = min(_initial_delay, nodes[node_id].required_time); // critical path time
 				if(nodes[nodes[node_id].inputs[0]].type!=PI){ // update only PO and gates required_time
 					if(nodes[node_id].obj->fCompl0 == 1){
-						nodes[nodes[node_id].inputs[0]].required_time = min(_initial_delay - (inverters[nodes[node_id].inv0_id].timing[0] + inverters[nodes[node_id].inv0_id].timing[1]), nodes[nodes[node_id].inputs[0]].required_time);
+						nodes[nodes[node_id].inputs[0]].required_time = min(nodes[node_id].required_time - (inverters[nodes[node_id].inv0_id].timing[0] + inverters[nodes[node_id].inv0_id].timing[1]), nodes[nodes[node_id].inputs[0]].required_time);
 					}else{
-						nodes[nodes[node_id].inputs[0]].required_time = min(_initial_delay, nodes[nodes[node_id].inputs[0]].required_time);
+						nodes[nodes[node_id].inputs[0]].required_time = min(nodes[node_id].required_time, nodes[nodes[node_id].inputs[0]].required_time);
 					}
 				}
 			}
@@ -400,7 +405,7 @@ void optimization(){
 				if(nodes[i].obj->fCompl0 == 1){
 					nodes[i].inv_slack0 = nodes[i].required_time - nodes[i].arrival0; // only INV has slack
 					if(nodes[i].inv_slack0 > 0){
-						for (int j = 0; j < inv_count; ++j){ // find the smallest INV to replace the original INV
+						for (int j = 0; j < inv_count; j++){ // find the smallest INV to replace the original INV
 							double new_time = inverters[j].timing[0] + inverters[j].timing[1];
 							if (new_time <= nodes[i].inv_slack0){
 								nodes[i].inv_slack0 -= new_time;
@@ -418,7 +423,7 @@ void optimization(){
 			else{
 				// get fanin0 arrival time
 				nodes[i].arrival0 = nodes[nodes[i].inputs[0]].delay;
-				double inv_time1 = 0., nand_arrival1 = nodes[i].arrival0;
+				double inv_time1 = 0.0, nand_arrival1 = nodes[i].arrival0;
 				if(nodes[i].obj->fCompl0 == 1){
 					inv_time1 = inverters[nodes[i].inv0_id].timing[0] + inverters[nodes[i].inv0_id].timing[1];
 					nand_arrival1 += inv_time1;
@@ -426,7 +431,7 @@ void optimization(){
 
 				// get fanin1 arrival time
 				nodes[i].arrival1 = nodes[nodes[i].inputs[1]].delay;  
-				double inv_time2 = 0., nand_arrival2 = nodes[i].arrival1;
+				double inv_time2 = 0.0, nand_arrival2 = nodes[i].arrival1;
 				if(nodes[i].obj->fCompl1 == 1){
 					inv_time2 = inverters[nodes[i].inv1_id].timing[0] + inverters[nodes[i].inv1_id].timing[1];
 					nand_arrival2 += inv_time2;
@@ -439,29 +444,25 @@ void optimization(){
 				double nand_time = nands[nodes[i].nand_id].timing[0] + (nands[nodes[i].nand_id].timing[1]  * Abc_ObjFanoutNum(nodes[i].obj));
 
 				if (nand_slack > 0){
-					for (int j = 0; j< nand_count; ++j){ // find the smallest NAND to replace the original NAND
+					for (int j = 0; j< nand_count; j++){ // find the smallest NAND to replace the original NAND
 						double new_time = nands[j].timing[0] + (nands[j].timing[1]  * Abc_ObjFanoutNum(nodes[i].obj));
 						if (new_time <= nand_slack){
 							nand_time = new_time;
-							nand_slack -= new_time;
-							inv1_slack -= new_time;
-							inv2_slack -= new_time;
 							nodes[i].nand_id = j;
 							break;
 						}
 					}
-				}else{
-					nand_slack -= nand_time;
-					inv1_slack -= nand_time;
-					inv2_slack -= nand_time;					
 				}
+				nand_slack -= nand_time;
+				inv1_slack -= nand_time;
+				inv2_slack -= nand_time;
 				_optimized_area += nands[nodes[i].nand_id].area; // update optimized_area
 				nodes[i].slack = nand_slack;
 
 				// step2: find better INV0 (independent to INV1)
 				if(nodes[i].obj->fCompl0 == 1){
 					if (inv1_slack > 0){
-						for (int j = 0; j < inv_count; ++j){ // find the smallest INV to replace the original INV
+						for (int j = 0; j < inv_count; j++){ // find the smallest INV to replace the original INV
 							double new_time = inverters[j].timing[0] + inverters[j].timing[1];
 							if (new_time <= inv1_slack){
 								inv1_slack -= new_time;
@@ -479,7 +480,7 @@ void optimization(){
 				// step2: find better INV1 (independent to INV0)
 				if(nodes[i].obj->fCompl1 == 1){
 					if (inv2_slack > 0){
-						for (int j = 0; j < inv_count; ++j){ // find the smallest INV to replace the original INV
+						for (int j = 0; j < inv_count; j++){ // find the smallest INV to replace the original INV
 							double new_time = inverters[j].timing[0] + inverters[j].timing[1];
 							if (new_time <= inv2_slack){
 								inv2_slack -= new_time;
@@ -492,9 +493,11 @@ void optimization(){
 					}
 					_optimized_area += inverters[nodes[i].inv1_id].area; // update optimized_area
 					nodes[i].inv_slack1 = inv2_slack;
-				}
-				
+				}				
 				nodes[i].delay = max(nand_arrival1, nand_arrival2) + nand_time; // update node delay
+				if(nodes[i].delay > _initial_delay){
+					printf("error");
+				}
 			}
 		}
 	}
@@ -510,8 +513,7 @@ int int_length(int num) {
     return length + (int)log10(num) + 1;
 }
 
-void Write(const char *pFileName, Abc_Ntk_t *ntk)
-{
+void Write(const char *pFileName, Abc_Ntk_t *ntk){
 	FILE *pFile;
 	pFile = fopen(pFileName, "w");
 	if (pFile == NULL)
@@ -540,7 +542,7 @@ void Write(const char *pFileName, Abc_Ntk_t *ntk)
 				if (nodes[nodes[i].inputs[0]].type != PI){
 					if(nodes[i].obj->fCompl0){
 						int padding = fixed_length - 7 - (int_length(g) + strlen(inverters[nodes[i].inv0_id].name) + int_length(nodes[nodes[i].inputs[0]].nand_gateID));
-						fprintf(pFile, "X%d = %s(X%d)%*s slack : %.2f\n", g++, inverters[nodes[i].inv0_id].name, nodes[nodes[i].inputs[0]].nand_gateID, padding, "", nodes[i].inv_slack0);
+						fprintf(pFile, "X%d = %s(X%d)%*s slack : %.2f\n", g++, inverters[nodes[i].inv0_id].name, nodes[nodes[i].inputs[0]].nand_gateID, padding, "", FIX_NEG_ZERO(nodes[i].inv_slack0));
 						// fprintf(pFile, "X%d = %s(X%d)\t\t\tslack : %.2f\n", g++, inverters[nodes[i].inv0_id].name, nodes[nodes[i].inputs[0]].nand_gateID, nodes[i].inv_slack0);
 					}
 				}
@@ -548,7 +550,7 @@ void Write(const char *pFileName, Abc_Ntk_t *ntk)
 				else{
 					if(nodes[i].obj->fCompl0){
 						int padding = fixed_length - 6 - (int_length(g) + strlen(inverters[nodes[i].inv0_id].name) + strlen(Abc_ObjName(nodes[nodes[i].inputs[0]].obj)));
-						fprintf(pFile, "X%d = %s(%s)%*s slack : %.2f\n", g++, inverters[nodes[i].inv0_id].name, Abc_ObjName(nodes[nodes[i].inputs[0]].obj), padding, "", nodes[i].inv_slack0);						
+						fprintf(pFile, "X%d = %s(%s)%*s slack : %.2f\n", g++, inverters[nodes[i].inv0_id].name, Abc_ObjName(nodes[nodes[i].inputs[0]].obj), padding, "", FIX_NEG_ZERO(nodes[i].inv_slack0));						
 						// fprintf(pFile, "X%d = %s(%s)\t\t\tslack : %.2f\n", g++, inverters[nodes[i].inv0_id].name, Abc_ObjName(nodes[nodes[i].inputs[0]].obj), nodes[i].inv_slack0);
 					}
 				}
@@ -561,7 +563,7 @@ void Write(const char *pFileName, Abc_Ntk_t *ntk)
 						nodes[i].inv0_gateID = g;
 
 						int padding = fixed_length - 7 - (int_length(g) + strlen(inverters[nodes[i].inv0_id].name) + int_length(nodes[nodes[i].inputs[0]].nand_gateID));
-						fprintf(pFile, "X%d = %s(X%d)%*s slack : %.2f\n", g++, inverters[nodes[i].inv0_id].name, nodes[nodes[i].inputs[0]].nand_gateID, padding, "", nodes[i].inv_slack0);
+						fprintf(pFile, "X%d = %s(X%d)%*s slack : %.2f\n", g++, inverters[nodes[i].inv0_id].name, nodes[nodes[i].inputs[0]].nand_gateID, padding, "", FIX_NEG_ZERO(nodes[i].inv_slack0));
 						// fprintf(pFile, "X%d = %s(X%d)\t\t\tslack : %.2f\n", g++, inverters[nodes[i].inv0_id].name, nodes[nodes[i].inputs[0]].nand_gateID, nodes[i].inv_slack0);
 						sprintf(input1, "X%d", nodes[i].inv0_gateID);
 					}else{
@@ -574,7 +576,7 @@ void Write(const char *pFileName, Abc_Ntk_t *ntk)
 						nodes[i].inv0_gateID = g;
 
 						int padding = fixed_length - 6 - (int_length(g) + strlen(inverters[nodes[i].inv0_id].name) + strlen(Abc_ObjName(nodes[nodes[i].inputs[0]].obj)));
-						fprintf(pFile, "X%d = %s(%s)%*s slack : %.2f\n", g++, inverters[nodes[i].inv0_id].name, Abc_ObjName(nodes[nodes[i].inputs[0]].obj), padding, "", nodes[i].inv_slack0);
+						fprintf(pFile, "X%d = %s(%s)%*s slack : %.2f\n", g++, inverters[nodes[i].inv0_id].name, Abc_ObjName(nodes[nodes[i].inputs[0]].obj), padding, "", FIX_NEG_ZERO(nodes[i].inv_slack0));
 						// fprintf(pFile, "X%d = %s(%s)\t\t\tslack : %.2f\n", g++, inverters[nodes[i].inv0_id].name, Abc_ObjName(nodes[nodes[i].inputs[0]].obj), nodes[i].inv_slack0);
 						sprintf(input1, "X%d", nodes[i].inv0_gateID);
 					}else{
@@ -588,7 +590,7 @@ void Write(const char *pFileName, Abc_Ntk_t *ntk)
 						nodes[i].inv1_gateID = g;
 
 						int padding = fixed_length - 7 - (int_length(g) + strlen(inverters[nodes[i].inv1_id].name) + int_length(nodes[nodes[i].inputs[1]].nand_gateID));
-						fprintf(pFile, "X%d = %s(X%d)%*s slack : %.2f\n", g++, inverters[nodes[i].inv1_id].name, nodes[nodes[i].inputs[1]].nand_gateID, padding, "", nodes[i].inv_slack1);
+						fprintf(pFile, "X%d = %s(X%d)%*s slack : %.2f\n", g++, inverters[nodes[i].inv1_id].name, nodes[nodes[i].inputs[1]].nand_gateID, padding, "", FIX_NEG_ZERO(nodes[i].inv_slack1));
 						// fprintf(pFile, "X%d = %s(X%d)\t\t\tslack : %.2f\n", g++, inverters[nodes[i].inv1_id].name, nodes[nodes[i].inputs[1]].nand_gateID, nodes[i].inv_slack1);
 						sprintf(input2, "X%d", nodes[i].inv1_gateID);
 					}else{
@@ -601,7 +603,7 @@ void Write(const char *pFileName, Abc_Ntk_t *ntk)
 						nodes[i].inv1_gateID = g;
 
 						int padding = fixed_length - 6 - (int_length(g) + strlen(inverters[nodes[i].inv1_id].name) + strlen(Abc_ObjName(nodes[nodes[i].inputs[1]].obj)));
-						fprintf(pFile, "X%d = %s(%s)%*s slack : %.2f\n", g++, inverters[nodes[i].inv1_id].name, Abc_ObjName(nodes[nodes[i].inputs[1]].obj), padding, "", nodes[i].inv_slack1);
+						fprintf(pFile, "X%d = %s(%s)%*s slack : %.2f\n", g++, inverters[nodes[i].inv1_id].name, Abc_ObjName(nodes[nodes[i].inputs[1]].obj), padding, "", FIX_NEG_ZERO(nodes[i].inv_slack1));
 						// fprintf(pFile, "X%d = %s(%s)\t\t\tslack : %.2f\n", g++, inverters[nodes[i].inv1_id].name, Abc_ObjName(nodes[nodes[i].inputs[1]].obj), nodes[i].inv_slack1);
 						sprintf(input2, "X%d", nodes[i].inv1_gateID);
 					}else{
@@ -611,7 +613,7 @@ void Write(const char *pFileName, Abc_Ntk_t *ntk)
 				nodes[i].nand_gateID = g;
 
 				int padding_ = fixed_length - 8 - (int_length(g) + strlen(nands[nodes[i].nand_id].name) + strlen(input1) + strlen(input2));
-				fprintf(pFile, "X%d = %s(%s, %s)%*s slack : %.2f\n", g++, nands[nodes[i].nand_id].name, input1, input2, padding_, "", nodes[i].slack);
+				fprintf(pFile, "X%d = %s(%s, %s)%*s slack : %.2f\n", g++, nands[nodes[i].nand_id].name, input1, input2, padding_, "", FIX_NEG_ZERO(nodes[i].slack));
 				// fprintf(pFile, "X%d = %s(%s, %s)\t\t\tslack : %.2f\n", g++, nands[nodes[i].nand_id].name, input1, input2, nodes[i].slack);
 			}
 		}
@@ -641,10 +643,11 @@ main(int argc, char **argv)
 	// step2: << map AND to NAND+INV >>
 	mapping(ntk);
 	createnodes(ntk);
+	// sortNodes();
 
 	// step3: << calculate initial delay >>
 	initialDelay();
-	printf("NODE: %d INV: %d NAND: %d\n", node_count, inv, nand);
+	printf("NODE: %d INV: %d NAND: %d\n", node_count, _inv, nand);
 	printf("initial_delay: %f\noriginal_area: %f\n", _initial_delay, _original_area);
 
 	// step4: << optimize area using slack>>
